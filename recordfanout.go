@@ -11,19 +11,35 @@ import (
 	pb "github.com/brotherlogic/recordfanout/proto"
 )
 
-const (
-	CONFIG_KEY = "/github.com/brotherlogic/queues/config"
-)
-
 //Server main server type
 type Server struct {
 	*goserver.GoServer
+	preCommit  []string
+	postCommit []string
 }
 
 // Init builds the server
 func Init() *Server {
 	s := &Server{
-		GoServer: &goserver.GoServer{},
+		GoServer:  &goserver.GoServer{},
+		preCommit: []string{},
+		postCommit: []string{
+			"cdprocessor",
+			"recordbudget",
+			"recordmatcher",
+			"recordsorganiser",
+			"recordmover",
+			"recordscores",
+			"recordprocess",
+			"recordprinter",
+			"recordsales",
+			"recordwants",
+			"digitalwantlist",
+			"recordstats",
+			"wantslist",
+			"recordvalidator",
+			"recordalerting",
+			"stobridge"},
 	}
 	return s
 }
