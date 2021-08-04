@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc"
 
 	gspb "github.com/brotherlogic/goserver/proto"
+	pb "github.com/brotherlogic/recordfanout/proto"
 )
 
 const (
@@ -29,7 +30,7 @@ func Init() *Server {
 
 // DoRegister does RPC registration
 func (s *Server) DoRegister(server *grpc.Server) {
-
+	pb.RegisterRecordFanoutServiceServer(server, s)
 }
 
 // ReportHealth alerts if we're not healthy

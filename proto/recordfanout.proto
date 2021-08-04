@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package recordfanout;
+
+option go_package = "github.com/brotherlogic/recordfanout/proto";
+
+message FanoutRequest{
+  int32 instance_id = 1;
+}
+
+message FanoutResponse {}
+
+service RecordFanoutService {
+  rpc Fanout(FanoutRequest) returns (FanoutResponse) {};
+}
