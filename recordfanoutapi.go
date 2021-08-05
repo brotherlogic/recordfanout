@@ -8,6 +8,34 @@ import (
 )
 
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
+	for _, server := range s.preCommit {
+		conn, err := s.FDialServer(ctx, server)
+
+		if err != nil {
+			return nil, err
+		}
+
+		client := pbrc.NewClientUpdateServiceClient(conn)
+		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
+		if err != nil {
+			return nil, err
+		}
+
+		conn.Close()
+	}
+
+	conn, err := s.FDialServer(ctx, "recordcollection")
+
+	if err != nil {
+		return nil, err
+	}
+
+	rcclient := pbrc.NewRecordCollectionServiceClient(conn)
+	_, err = rcclient.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: request.InstanceId})
+	if err != nil {
+		return nil, err
+	}
+
 	for _, server := range s.postCommit {
 		conn, err := s.FDialServer(ctx, server)
 

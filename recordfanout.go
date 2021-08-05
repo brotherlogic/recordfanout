@@ -22,7 +22,7 @@ type Server struct {
 func Init() *Server {
 	s := &Server{
 		GoServer:  &goserver.GoServer{},
-		preCommit: []string{},
+		preCommit: []string{"recordalerting"},
 		postCommit: []string{
 			"cdprocessor",
 			"recordbudget",
@@ -38,7 +38,6 @@ func Init() *Server {
 			"recordstats",
 			"wantslist",
 			"recordvalidator",
-			"recordalerting",
 			"stobridge"},
 	}
 	return s
