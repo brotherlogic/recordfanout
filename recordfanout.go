@@ -25,6 +25,7 @@ func Init() *Server {
 		preCommit: []string{"recordalerting"},
 		postCommit: []string{
 			"cdprocessor",
+			"recordcleaner",
 			"recordbudget",
 			"recordmatcher",
 			"recordsorganiser",
