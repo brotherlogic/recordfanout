@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Second*10)
+	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Minute*5)
 	defer cancel()
 
 	conn, err := utils.LFDialServer(ctx, "recordfanout")
@@ -35,9 +35,9 @@ func main() {
 	fanoutFlags := flag.NewFlagSet("Fanout", flag.ExitOnError)
 	var id = fanoutFlags.Int("id", -1, "Id of the record to add")
 
-	if err := fanoutFlags.Parse(os.Args[2:]); err == nil {
+	if err := fanoutFlags.Parse(os.Args[1:]); err == nil {
 		res, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: int32(*id)})
-		fmt.Printf("Fanout response: %v/%v", res, err)
+		fmt.Printf("Fanout response: %v/%v\n", res, err)
 	}
 
 }
