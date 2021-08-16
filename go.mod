@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/brotherlogic/goserver v0.0.0-20210805130102-24f4ac0bb699
-	github.com/brotherlogic/recordcollection v0.0.0-20210813194254-f1d438356916
+	github.com/brotherlogic/recordcollection v0.0.0-20210815225215-391c83574459
 	github.com/prometheus/procfs v0.7.2 // indirect
 	github.com/struCoder/pidusage v0.2.1 // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d

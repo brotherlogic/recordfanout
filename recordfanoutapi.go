@@ -14,25 +14,23 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	for _, server := range s.preCommit {
 		conn, err := s.FDialServer(ctx, server)
-
 		if err != nil {
 			return nil, err
 		}
+		defer conn.Close()
 
 		client := pbrc.NewClientUpdateServiceClient(conn)
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
 		if err != nil {
 			return nil, err
 		}
-
-		conn.Close()
 	}
 
 	conn, err := s.FDialServer(ctx, "recordcollection")
-
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	rcclient := pbrc.NewRecordCollectionServiceClient(conn)
 	_, err = rcclient.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: request.InstanceId})
@@ -42,18 +40,16 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 
 	for _, server := range s.postCommit {
 		conn, err := s.FDialServer(ctx, server)
-
 		if err != nil {
 			return nil, err
 		}
+		defer conn.Close()
 
 		client := pbrc.NewClientUpdateServiceClient(conn)
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
 		if err != nil {
 			return nil, err
 		}
-
-		conn.Close()
 	}
 
 	return &pb.FanoutResponse{}, nil
