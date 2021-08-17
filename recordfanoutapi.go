@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"golang.org/x/net/context"
 
 	pbrc "github.com/brotherlogic/recordcollection/proto"
@@ -12,6 +14,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		s.Log("Unable to fanout empty request")
 		return &pb.FanoutResponse{}, nil
 	}
+	s.Log(fmt.Sprintf("Running fanout for %v", request.GetInstanceId()))
 	for _, server := range s.preCommit {
 		conn, err := s.FDialServer(ctx, server)
 		if err != nil {
