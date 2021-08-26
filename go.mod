@@ -9,10 +9,8 @@ require (
 	github.com/brotherlogic/recordcollection v0.0.0-20210823184254-8ff77964aae3
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/prometheus/client_golang v1.11.0
-	github.com/struCoder/pidusage v0.2.1 // indirect
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
-	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20210825212027-de86158e7fda // indirect
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
