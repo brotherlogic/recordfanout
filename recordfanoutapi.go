@@ -50,7 +50,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		if err != nil {
 			return nil, err
 		}
-		preLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Now().Sub(t).Nanoseconds() / 1000000))
+		preLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 	}
 
 	t := time.Now()
@@ -65,7 +65,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	if err != nil {
 		return nil, err
 	}
-	commitLatency.Observe(float64(time.Now().Sub(t).Nanoseconds() / 1000000))
+	commitLatency.Observe(float64(time.Since(t).Milliseconds()))
 
 	for _, server := range s.postCommit {
 		t := time.Now()
@@ -80,7 +80,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		if err != nil {
 			return nil, err
 		}
-		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Now().Sub(t).Nanoseconds() / 1000000))
+		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 	}
 
 	return &pb.FanoutResponse{}, nil
