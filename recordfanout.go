@@ -39,7 +39,8 @@ func Init() *Server {
 			"recordstats",
 			"wantslist",
 			"recordvalidator",
-			"stobridge"},
+			"stobridge",
+			"display"},
 	}
 	return s
 }
