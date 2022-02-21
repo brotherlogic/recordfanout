@@ -31,6 +31,7 @@ var (
 )
 
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
+	ot := time.Now()
 	if request.GetInstanceId() == 0 {
 		s.Log("Unable to fanout empty request")
 		return &pb.FanoutResponse{}, nil
@@ -67,10 +68,6 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	commitLatency.Observe(float64(time.Since(t).Milliseconds()))
 
-	if time.Since(t).Minutes() > 5 {
-		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v", request.GetInstanceId(), time.Since(t)))
-	}
-
 	for _, server := range s.postCommit {
 		t := time.Now()
 		conn, err := s.FDialServer(ctx, server)
@@ -85,6 +82,10 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 			return nil, err
 		}
 		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
+	}
+
+	if time.Since(ot).Minutes() > 5 {
+		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v", request.GetInstanceId(), time.Since(ot)))
 	}
 
 	return &pb.FanoutResponse{}, nil
