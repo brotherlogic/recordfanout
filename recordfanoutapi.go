@@ -67,6 +67,10 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	commitLatency.Observe(float64(time.Since(t).Milliseconds()))
 
+	if time.Since(t).Minutes() > 5 {
+		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v", request.GetInstanceId(), time.Since(t)))
+	}
+
 	for _, server := range s.postCommit {
 		t := time.Now()
 		conn, err := s.FDialServer(ctx, server)
