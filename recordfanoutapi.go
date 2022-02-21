@@ -6,6 +6,7 @@ import (
 
 	"golang.org/x/net/context"
 
+	"github.com/brotherlogic/goserver/utils"
 	pbrc "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordfanout/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -85,7 +86,8 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 
 	if time.Since(ot).Minutes() > 5 {
-		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v", request.GetInstanceId(), time.Since(ot)))
+		key, _ := utils.GetContextKey(ctx)
+		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v)", request.GetInstanceId(), time.Since(ot), key))
 	}
 
 	return &pb.FanoutResponse{}, nil
