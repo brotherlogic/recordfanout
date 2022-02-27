@@ -38,6 +38,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		return &pb.FanoutResponse{}, nil
 	}
 	s.Log(fmt.Sprintf("Running fanout for %v", request.GetInstanceId()))
+	serverTime := make(map[string]time.Duration)
 
 	for _, server := range s.preCommit {
 		t := time.Now()
@@ -53,6 +54,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 			return nil, err
 		}
 		preLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
+		serverTime[server] = time.Since(t)
 	}
 
 	t := time.Now()
@@ -67,6 +69,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	if err != nil {
 		return nil, err
 	}
+	serverTime["commit"] = time.Since(t)
 	commitLatency.Observe(float64(time.Since(t).Milliseconds()))
 
 	for _, server := range s.postCommit {
@@ -83,11 +86,16 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 			return nil, err
 		}
 		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
+		serverTime[server] = time.Since(t)
 	}
 
 	if time.Since(ot).Minutes() > 1 {
 		key, _ := utils.GetContextKey(ctx)
-		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v)", request.GetInstanceId(), time.Since(ot), key))
+		times := ""
+		for key, value := range serverTime {
+			times += fmt.Sprintf("%v took %v\n", key, value)
+		}
+		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v\n%v)", request.GetInstanceId(), time.Since(ot), key, times))
 	}
 
 	return &pb.FanoutResponse{}, nil
