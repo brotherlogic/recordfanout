@@ -85,7 +85,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 	}
 
-	if time.Since(ot).Minutes() > 5 {
+	if time.Since(ot).Minutes() > 1 {
 		key, _ := utils.GetContextKey(ctx)
 		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v)", request.GetInstanceId(), time.Since(ot), key))
 	}
