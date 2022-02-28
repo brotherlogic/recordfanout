@@ -93,7 +93,9 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		key, _ := utils.GetContextKey(ctx)
 		times := ""
 		for key, value := range serverTime {
-			times += fmt.Sprintf("%v took %v\n", key, value)
+			if value > time.Second {
+				times += fmt.Sprintf("%v took %v\n", key, value)
+			}
 		}
 		s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v\n%v)", request.GetInstanceId(), time.Since(ot), key, times))
 	}
