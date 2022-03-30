@@ -33,7 +33,7 @@ var (
 
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
 	ot := time.Now()
-	if request.GetInstanceId() == 0 {
+	if request.GetInstanceId() <= 0 {
 		s.Log("Unable to fanout empty request")
 		return &pb.FanoutResponse{}, nil
 	}
