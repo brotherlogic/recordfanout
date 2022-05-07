@@ -42,6 +42,7 @@ func Init() *Server {
 			"recordvalidator",
 			"stobridge",
 			"display",
+			"bandcampserver",
 		},
 	}
 	return s
