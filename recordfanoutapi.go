@@ -32,13 +32,12 @@ var (
 )
 
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
-	s.CtxLog(ctx, fmt.Sprintf("Fanning out %v", request.GetInstanceId()))
 	ot := time.Now()
 	if request.GetInstanceId() <= 0 {
 		s.Log("Unable to fanout empty request")
 		return &pb.FanoutResponse{}, nil
 	}
-	s.Log(fmt.Sprintf("Running fanout for %v", request.GetInstanceId()))
+	s.CtxLog(ctx, fmt.Sprintf("Running fanout for %v", request.GetInstanceId()))
 	serverTime := make(map[string]time.Duration)
 
 	for _, server := range s.preCommit {
