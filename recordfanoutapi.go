@@ -83,11 +83,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		client := pbrc.NewClientUpdateServiceClient(conn)
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
 		if err != nil {
-			if server == "cdprocessor" {
-				s.CtxLog(ctx, fmt.Sprintf("CD Processor error: %v", err))
-			} else {
-				return nil, err
-			}
+			return nil, err
 		}
 		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 		serverTime[server] = time.Since(t)
