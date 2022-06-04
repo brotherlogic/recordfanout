@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"golang.org/x/net/context"
+	"google.golang.org/grpc/status"
 
 	"github.com/brotherlogic/goserver/utils"
 	pbrc "github.com/brotherlogic/recordcollection/proto"
@@ -29,6 +30,10 @@ var (
 		Help:    "The latency of client requests",
 		Buckets: []float64{.005 * 1000, .01 * 1000, .025 * 1000, .05 * 1000, .1 * 1000, .25 * 1000, .5 * 1000, 1 * 1000, 2.5 * 1000, 5 * 1000, 10 * 1000, 100 * 1000, 1000 * 1000},
 	}, []string{"method"})
+	errors = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "record_fanout_errors",
+		Help: "Errors by client",
+	}, []string{"client", "code"})
 )
 
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
@@ -50,6 +55,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 
 		client := pbrc.NewClientUpdateServiceClient(conn)
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
+		errors.With(prometheus.Labels{"client": server, "code": fmt.Sprintf("%v", status.Convert(err).Code())}).Inc()
 		if err != nil {
 			return nil, err
 		}
@@ -66,6 +72,8 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 
 	rcclient := pbrc.NewRecordCollectionServiceClient(conn)
 	_, err = rcclient.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: request.InstanceId})
+	errors.With(prometheus.Labels{"client": "commit", "code": fmt.Sprintf("%v", status.Convert(err).Code())}).Inc()
+
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +90,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 
 		client := pbrc.NewClientUpdateServiceClient(conn)
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
+		errors.With(prometheus.Labels{"client": server, "code": fmt.Sprintf("%v", status.Convert(err).Code())}).Inc()
 		if err != nil {
 			return nil, err
 		}
