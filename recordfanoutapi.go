@@ -49,7 +49,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		t := time.Now()
 		conn, err := s.FDialServer(ctx, server)
 		if err != nil {
-			return nil, err
+			return nil, status.Errorf(status.Convert(err).Code(), "Unable to dial %v -> %v", server, err)
 		}
 		defer conn.Close()
 
@@ -57,7 +57,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
 		errors.With(prometheus.Labels{"client": server, "code": fmt.Sprintf("%v", status.Convert(err).Code())}).Inc()
 		if err != nil {
-			return nil, err
+			return nil, status.Errorf(status.Convert(err).Code(), "Unable to update %v -> %v", server, err)
 		}
 		preLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 		serverTime[server] = time.Since(t)
@@ -66,7 +66,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	t := time.Now()
 	conn, err := s.FDialServer(ctx, "recordcollection")
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(status.Convert(err).Code(), "Unable to dial %v -> %v", "recordcollection", err)
 	}
 	defer conn.Close()
 
@@ -84,7 +84,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		t := time.Now()
 		conn, err := s.FDialServer(ctx, server)
 		if err != nil {
-			return nil, err
+			return nil, status.Errorf(status.Convert(err).Code(), "Unable to dial %v -> %v", server, err)
 		}
 		defer conn.Close()
 
@@ -92,7 +92,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		_, err = client.ClientUpdate(ctx, &pbrc.ClientUpdateRequest{InstanceId: request.InstanceId})
 		errors.With(prometheus.Labels{"client": server, "code": fmt.Sprintf("%v", status.Convert(err).Code())}).Inc()
 		if err != nil {
-			return nil, err
+			return nil, status.Errorf(status.Convert(err).Code(), "Unable to update %v -> %v", server, err)
 		}
 		postLatency.With(prometheus.Labels{"method": server}).Observe(float64(time.Since(t).Milliseconds()))
 		serverTime[server] = time.Since(t)
