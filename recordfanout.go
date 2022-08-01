@@ -29,7 +29,6 @@ func Init() *Server {
 			"recordbudget",
 			"recordmatcher",
 			"recordsorganiser",
-			"recordsorg",
 			"recordmover",
 			"recordscores",
 			"recordprocess",
