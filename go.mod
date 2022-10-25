@@ -3,16 +3,15 @@ module github.com/brotherlogic/recordfanout
 go 1.16
 
 require (
-	github.com/brotherlogic/gobuildslave v0.0.0-20220927132505-852d6ebaffa7 // indirect
-	github.com/brotherlogic/goserver v0.0.0-20220920173556-ecc7853fd77c
-	github.com/brotherlogic/lock v0.0.0-20220922194254-ec1ff86c46dc // indirect
-	github.com/brotherlogic/logging v0.0.0-20220920173710-40a97e772155 // indirect
-	github.com/brotherlogic/recordcollection v0.0.0-20220912143930-00836d99ffdb
-	github.com/matttproud/golang_protobuf_extensions v1.0.2 // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20221024150514-c05d2f9cac31 // indirect
+	github.com/brotherlogic/goserver v0.0.0-20221019083919-b258358aaf5a
+	github.com/brotherlogic/lock v0.0.0-20221020042514-40f338e25c78 // indirect
+	github.com/brotherlogic/recordcollection v0.0.0-20221019091431-f652ec8ab4fb
+	github.com/matttproud/golang_protobuf_extensions v1.0.3 // indirect
 	github.com/prometheus/client_golang v1.13.0
-	golang.org/x/net v0.0.0-20220927171203-f486391704dc
-	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
-	google.golang.org/genproto v0.0.0-20220927151529-dcaddaf36704 // indirect
-	google.golang.org/grpc v1.49.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.4 // indirect
+	golang.org/x/net v0.1.0
+	google.golang.org/genproto v0.0.0-20221024183307-1bc688fe9f3e // indirect
+	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.1
 )
