@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Minute*20)
+	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Hour*5)
 	defer cancel()
 
 	conn, err := utils.LFDialServer(ctx, "recordfanout")
