@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Minute*5)
+	ctx, cancel := utils.ManualContext("recordfanout-cli", time.Minute*20)
 	defer cancel()
 
 	conn, err := utils.LFDialServer(ctx, "recordfanout")
@@ -50,6 +50,17 @@ func main() {
 				fmt.Printf("Cleaning %v\n", r.GetRecord().GetRelease().GetTitle())
 				client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
 			}
+		}
+	case "fullping":
+		conn, err := utils.LFDialServer(ctx, "recordcollection")
+		if err != nil {
+			log.Fatalf("Unable to dial: %v", err)
+		}
+		c2 := pbrc.NewRecordCollectionServiceClient(conn)
+		recs, err := c2.QueryRecords(ctx, &pbrc.QueryRecordsRequest{Query: &pbrc.QueryRecordsRequest_UpdateTime{0}})
+		for _, rec := range recs.GetInstanceIds() {
+			_, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
+			log.Printf("FANOUT %v -> %v", rec, err)
 		}
 	}
 
