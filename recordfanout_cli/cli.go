@@ -51,6 +51,23 @@ func main() {
 				client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
 			}
 		}
+	case "recache":
+		conn, err := utils.LFDialServer(ctx, "recordcollection")
+		if err != nil {
+			log.Fatalf("Unable to dial: %v", err)
+		}
+		c2 := pbrc.NewRecordCollectionServiceClient(conn)
+		recs, err := c2.QueryRecords(ctx, &pbrc.QueryRecordsRequest{Query: &pbrc.QueryRecordsRequest_UpdateTime{0}})
+		for _, rec := range recs.GetInstanceIds() {
+			r, err := c2.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: rec})
+			if err != nil {
+				log.Fatalf("Unable to get: %v", err)
+			}
+			if time.Since(time.Unix(r.GetRecord().GetMetadata().GetLastCache(), 0)) > time.Hour*24*30 {
+				fmt.Printf("Recaching %v\n", r.GetRecord().GetRelease().GetTitle())
+				client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
+			}
+		}
 	case "fullping":
 		conn, err := utils.LFDialServer(ctx, "recordcollection")
 		if err != nil {
