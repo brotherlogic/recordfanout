@@ -58,9 +58,12 @@ func main() {
 		}
 		c2 := pbrc.NewRecordCollectionServiceClient(conn)
 		recs, err := c2.QueryRecords(ctx, &pbrc.QueryRecordsRequest{Query: &pbrc.QueryRecordsRequest_UpdateTime{0}})
-		for _, rec := range recs.GetInstanceIds() {
-			_, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
-			log.Printf("FANOUT %v -> %v", rec, err)
+		if err == nil {
+			log.Printf("READ %v recordds", len(recs.GetInstanceIds()))
+			for _, rec := range recs.GetInstanceIds() {
+				_, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
+				log.Printf("FANOUT %v -> %v", rec, err)
+			}
 		}
 	}
 
