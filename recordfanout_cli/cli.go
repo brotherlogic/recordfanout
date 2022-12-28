@@ -58,14 +58,14 @@ func main() {
 		}
 		c2 := pbrc.NewRecordCollectionServiceClient(conn)
 		recs, err := c2.QueryRecords(ctx, &pbrc.QueryRecordsRequest{Query: &pbrc.QueryRecordsRequest_UpdateTime{0}})
-		for _, rec := range recs.GetInstanceIds() {
+		for i, rec := range recs.GetInstanceIds() {
 			r, err := c2.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: rec})
 			if err != nil {
 				log.Fatalf("Unable to get: %v", err)
 			}
 			if time.Since(time.Unix(r.GetRecord().GetMetadata().GetLastCache(), 0)) > time.Hour*24*30 {
-				fmt.Printf("Recaching %v\n", r.GetRecord().GetRelease().GetTitle())
-				client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
+				_, err := c2.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: rec})
+				log.Printf("REcache (%v/%v): %v [%v] -> %v", i, len(recs.GetInstanceIds()), rec, r.GetRecord().GetRelease().GetTitle(), err)
 			}
 		}
 	case "fullping":
@@ -78,7 +78,7 @@ func main() {
 		if err == nil {
 			log.Printf("READ %v recordds", len(recs.GetInstanceIds()))
 			for _, rec := range recs.GetInstanceIds() {
-				_, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: rec})
+				_, err := c2.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: rec})
 				log.Printf("FANOUT %v -> %v", rec, err)
 			}
 		}
