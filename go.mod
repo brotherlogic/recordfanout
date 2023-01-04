@@ -3,6 +3,7 @@ module github.com/brotherlogic/recordfanout
 go 1.16
 
 require (
+	github.com/brotherlogic/gobuildslave v0.0.0-20230104192933-16ebfc7ca538 // indirect
 	github.com/brotherlogic/goserver v0.0.0-20230104040908-a5268e3d66f6
 	github.com/brotherlogic/recordcollection v0.0.0-20230104163055-af781c044ee0
 	github.com/prometheus/client_golang v1.14.0
