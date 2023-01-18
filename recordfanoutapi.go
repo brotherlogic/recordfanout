@@ -98,7 +98,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		serverTime[server] = time.Since(t)
 	}
 
-	if time.Since(ot).Minutes() > 1 {
+	if time.Since(ot).Minutes() > 5 {
 		key, _ := utils.GetContextKey(ctx)
 		times := ""
 		for key, value := range serverTime {
