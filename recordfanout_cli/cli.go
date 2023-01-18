@@ -65,7 +65,7 @@ func main() {
 			}
 			if time.Since(time.Unix(r.GetRecord().GetMetadata().GetLastCache(), 0)) > time.Hour*24*30 {
 				_, err := c2.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: rec})
-				log.Printf("REcache (%v/%v): %v [%v] -> %v", i, len(recs.GetInstanceIds()), rec, r.GetRecord().GetRelease().GetTitle(), err)
+				fmt.Printf("REcache (%v/%v): %v [%v] -> %v\n", i, len(recs.GetInstanceIds()), rec, r.GetRecord().GetRelease().GetTitle(), err)
 			}
 		}
 	case "fullping":
@@ -76,10 +76,10 @@ func main() {
 		c2 := pbrc.NewRecordCollectionServiceClient(conn)
 		recs, err := c2.QueryRecords(ctx, &pbrc.QueryRecordsRequest{Query: &pbrc.QueryRecordsRequest_UpdateTime{0}})
 		if err == nil {
-			log.Printf("READ %v recordds", len(recs.GetInstanceIds()))
+			fmt.Printf("READ %v recordds\n", len(recs.GetInstanceIds()))
 			for _, rec := range recs.GetInstanceIds() {
 				_, err := c2.CommitRecord(ctx, &pbrc.CommitRecordRequest{InstanceId: rec})
-				log.Printf("FANOUT %v -> %v", rec, err)
+				fmt.Printf("FANOUT %v -> %v\n", rec, err)
 			}
 		}
 	}
