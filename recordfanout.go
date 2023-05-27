@@ -38,7 +38,7 @@ func Init() *Server {
 			"digitalwantlist",
 			"recordstats",
 			//	"wantslist",
-			"recordvalidator",
+			//	"recordvalidator",
 			"stobridge",
 			"display",
 			"bandcampserver",
