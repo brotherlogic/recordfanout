@@ -11,7 +11,7 @@ import (
 	pb "github.com/brotherlogic/recordfanout/proto"
 )
 
-//Server main server type
+// Server main server type
 type Server struct {
 	*goserver.GoServer
 	preCommit  []string
@@ -37,7 +37,7 @@ func Init() *Server {
 			"recordwants",
 			"digitalwantlist",
 			"recordstats",
-			"wantslist",
+			//	"wantslist",
 			"recordvalidator",
 			"stobridge",
 			"display",
