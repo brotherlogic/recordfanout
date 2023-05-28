@@ -104,7 +104,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 
 	longest := ""
-	longestTime := time.Second
+	longestTime := time.Nanosecond
 	for key, value := range serverTime {
 		if value > longestTime {
 			longest = key
