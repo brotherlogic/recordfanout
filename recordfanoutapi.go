@@ -113,7 +113,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	s.CtxLog(ctx, fmt.Sprintf("LongestTook %v -> %v", longestTime, longest))
 
-	if time.Since(ot).Seconds() > 30 {
+	if time.Since(ot).Seconds() > 20 {
 		key, _ := utils.GetContextKey(ctx)
 		times := ""
 		for key, value := range serverTime {
