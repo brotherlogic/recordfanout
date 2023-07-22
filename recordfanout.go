@@ -42,6 +42,7 @@ func Init() *Server {
 			"stobridge",
 			"display",
 			"bandcampserver",
+			"grambridge",
 		},
 	}
 	return s
