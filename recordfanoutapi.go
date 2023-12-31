@@ -7,7 +7,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/status"
 
-	"github.com/brotherlogic/goserver/utils"
 	pbrc "github.com/brotherlogic/recordcollection/proto"
 	pb "github.com/brotherlogic/recordfanout/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -113,7 +112,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	s.CtxLog(ctx, fmt.Sprintf("LongestTook %v -> %v", longestTime, longest))
 
-	if time.Since(ot).Seconds() > 60 {
+	/*if time.Since(ot).Seconds() > 60 {
 		key, _ := utils.GetContextKey(ctx)
 		times := ""
 		for key, value := range serverTime {
@@ -122,7 +121,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 			}
 		}
 		//s.RaiseIssue("Slow fanout", fmt.Sprintf("Fanout for %v took %v (%v\n%v)", request.GetInstanceId(), time.Since(ot), key, times))
-	}
+	}*/
 
 	return &pb.FanoutResponse{}, nil
 }
