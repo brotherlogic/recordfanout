@@ -35,7 +35,6 @@ func Init() *Server {
 			"recordprinter",
 			"recordsales",
 			"recordwants",
-			"digitalwantlist",
 			"recordstats",
 			"wantslist",
 			"recordvalidator",
