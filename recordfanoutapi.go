@@ -42,6 +42,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 	client := pbrc.NewRecordCollectionServiceClient(conn)
 	rec, err := client.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: request.GetInstanceId()})
 	if err != nil {
@@ -81,7 +82,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 
 	t := time.Now()
-	conn, err := s.FDialServer(ctx, "recordcollection")
+	conn, err = s.FDialServer(ctx, "recordcollection")
 	if err != nil {
 		return nil, status.Errorf(status.Convert(err).Code(), "Unable to dial %v -> %v", "recordcollection", err)
 	}
