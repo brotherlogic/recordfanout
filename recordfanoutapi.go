@@ -38,6 +38,20 @@ var (
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
 	ot := time.Now()
 
+	conn, err := s.FDialServer(ctx, "recordcollection")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	client := pbrc.NewRecordCollectionServiceClient(conn)
+	rec, err := client.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: request.GetInstanceId()})
+	if err != nil {
+		return nil, err
+	}
+	if rec.GetRecord().GetMetadata().GetFiledUnder() == pbrc.ReleaseMetadata_FILE_TAPE {
+		return &pb.FanoutResponse{}, nil
+	}
+
 	defer func() {
 		s.CtxLog(ctx, fmt.Sprintf("FanoutTook %v", time.Since(ot)))
 	}()
@@ -68,7 +82,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 
 	t := time.Now()
-	conn, err := s.FDialServer(ctx, "recordcollection")
+	conn, err = s.FDialServer(ctx, "recordcollection")
 	if err != nil {
 		return nil, status.Errorf(status.Convert(err).Code(), "Unable to dial %v -> %v", "recordcollection", err)
 	}
