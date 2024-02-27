@@ -45,13 +45,16 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	defer conn.Close()
 	client := pbrc.NewRecordCollectionServiceClient(conn)
-	_, err = client.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: request.GetInstanceId()})
+	rec, err := client.GetRecord(ctx, &pbrc.GetRecordRequest{InstanceId: request.GetInstanceId()})
 	if err != nil {
 		// Record has been deleted
 		if status.Code(err) == codes.OutOfRange {
 			return &pb.FanoutResponse{}, nil
 		}
 		return nil, err
+	}
+	if rec.GetRecord().GetMetadata().GetFiledUnder() == pbrc.ReleaseMetadata_FILE_TAPE || rec.GetRecord().GetMetadata().GetBoxState() == pbrc.ReleaseMetadata_IN_TAPE_BOX {
+		return &pb.FanoutResponse{}, nil
 	}
 
 	defer func() {
