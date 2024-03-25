@@ -53,6 +53,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		}
 		return nil, err
 	}
+	s.CtxLog(ctx, fmt.Sprintf("Running on %v", rec))
 
 	defer func() {
 		s.CtxLog(ctx, fmt.Sprintf("FanoutTook %v", time.Since(ot)))
