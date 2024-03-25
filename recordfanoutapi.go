@@ -53,9 +53,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 		}
 		return nil, err
 	}
-	if rec.GetRecord().GetMetadata().GetFiledUnder() == pbrc.ReleaseMetadata_FILE_TAPE || rec.GetRecord().GetMetadata().GetBoxState() == pbrc.ReleaseMetadata_IN_TAPE_BOX {
-		return &pb.FanoutResponse{}, nil
-	}
+	s.CtxLog(ctx, fmt.Sprintf("Running on %v", rec))
 
 	defer func() {
 		s.CtxLog(ctx, fmt.Sprintf("FanoutTook %v", time.Since(ot)))
