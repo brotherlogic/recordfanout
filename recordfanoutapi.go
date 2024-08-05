@@ -57,7 +57,7 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 
 	// Check that we're not stale in LIMBO
 	if rec.GetRecord().GetRelease().GetFolderId() == 3380098 && time.Since(time.Unix(rec.GetRecord().GetMetadata().GetLastMoveTime(), 0)) > time.Hour*24*7 {
-		s.RaiseIssue(fmt.Sprintf("%v is stale in limbo"), fmt.Sprintf("%v", time.Since(time.Unix(rec.GetRecord().GetMetadata().GetLastMoveTime()))))
+		s.RaiseIssue(fmt.Sprintf("%v is stale in limbo", request.GetInstanceId()), fmt.Sprintf("%v", time.Since(time.Unix(rec.GetRecord().GetMetadata().GetLastMoveTime(), 0))))
 	}
 
 	// Hard skip everything but unknown or 12 inch
