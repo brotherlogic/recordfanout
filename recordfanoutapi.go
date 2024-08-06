@@ -59,7 +59,9 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	if rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_UNKNOWN &&
 		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_12_INCH &&
 		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_7_INCH {
-		return &pb.FanoutResponse{}, nil
+		if rec.GetRecord().GetRelease().GetInstanceId() != 1733936518 {
+			return &pb.FanoutResponse{}, nil
+		}
 	}
 
 	defer func() {
