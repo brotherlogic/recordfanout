@@ -24,6 +24,7 @@ func Init() *Server {
 		GoServer:  &goserver.GoServer{},
 		preCommit: []string{"recordstats", "recordalerting"},
 		postCommit: []string{
+			"recordgetter",
 			"cdprocessor",
 			"recordcleaner",
 			"recordbudget",
