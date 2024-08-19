@@ -39,6 +39,11 @@ var (
 func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.FanoutResponse, error) {
 	ot := time.Now()
 
+	if request.GetInstanceId() <= 0 {
+		s.CtxLog(ctx, fmt.Sprintf("Dropping key: %v", request))
+		return &pb.FanoutResponse{}, nil
+	}
+
 	conn, err := s.FDialServer(ctx, "recordcollection")
 	if err != nil {
 		return nil, err
