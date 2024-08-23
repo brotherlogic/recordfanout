@@ -63,12 +63,9 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	// Hard skip everything but unknown or 12 inch
 	if rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_UNKNOWN &&
 		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_12_INCH &&
-		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_7_INCH {
-		if rec.GetRecord().GetRelease().GetInstanceId() != 1733936518 &&
-			rec.GetRecord().GetRelease().GetInstanceId() != 1624274765 &&
-			rec.GetRecord().GetRelease().GetInstanceId() != 1620578833 {
-			return &pb.FanoutResponse{}, nil
-		}
+		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_7_INCH &&
+		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_CD {
+		return &pb.FanoutResponse{}, nil
 	}
 
 	defer func() {
