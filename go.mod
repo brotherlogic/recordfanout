@@ -6,7 +6,7 @@ toolchain go1.23.0
 
 require (
 	github.com/brotherlogic/goserver v0.0.0-20240826215223-fccbac46b3d4
-	github.com/brotherlogic/recordcollection v0.0.0-20241004192633-6f22c30f6a15
+	github.com/brotherlogic/recordcollection v0.0.0-20241004212747-01e16d6fc780
 	github.com/prometheus/client_golang v1.20.4
 	golang.org/x/net v0.30.0
 	google.golang.org/grpc v1.67.1
