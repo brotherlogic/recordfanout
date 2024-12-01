@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/brotherlogic/goserver v0.0.0-20240826215223-fccbac46b3d4
-	github.com/brotherlogic/recordcollection v0.0.0-20241201192310-43ac1e430e91
+	github.com/brotherlogic/recordcollection v0.0.0-20241201192902-8c751938cae0
 	github.com/prometheus/client_golang v1.20.5
 	golang.org/x/net v0.31.0
 	google.golang.org/grpc v1.68.0
