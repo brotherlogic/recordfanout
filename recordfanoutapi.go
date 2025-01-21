@@ -60,14 +60,6 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	s.CtxLog(ctx, fmt.Sprintf("Running on %v", rec))
 
-	// Hard skip everything but unknown or 12 inch
-	if rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_UNKNOWN &&
-		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_12_INCH &&
-		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_CD &&
-		rec.GetRecord().GetMetadata().GetFiledUnder() != pbrc.ReleaseMetadata_FILE_DIGITAL {
-		return &pb.FanoutResponse{}, nil
-	}
-
 	defer func() {
 		s.CtxLog(ctx, fmt.Sprintf("FanoutTook %v", time.Since(ot)))
 	}()
