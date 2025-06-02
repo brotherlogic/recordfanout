@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a
-	github.com/brotherlogic/recordcollection v0.0.0-20250602210703-427a11d3d6da
+	github.com/brotherlogic/recordcollection v0.0.0-20250602211619-2cbd8ef18a3e
 	github.com/prometheus/client_golang v1.22.0
 	golang.org/x/net v0.40.0
 	google.golang.org/grpc v1.72.2
@@ -14,7 +14,7 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/buildserver v0.0.0-20250602201412-6457418ba6bb // indirect
-	github.com/brotherlogic/datastore v0.0.0-20250602203041-d6f41fd1a46b // indirect
+	github.com/brotherlogic/datastore v0.0.0-20250602212255-2d2f69cb6a7e // indirect
 	github.com/brotherlogic/discovery v0.0.0-20250510023052-d0207340fd9e // indirect
 	github.com/brotherlogic/dstore v0.0.0-20250602202242-3f2600c6f58a // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20250602211352-1f23ad14b034 // indirect
