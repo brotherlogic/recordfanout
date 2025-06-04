@@ -41,6 +41,7 @@ func Init() *Server {
 			"display",
 			"bandcampserver",
 			"grambridge",
+			"recordadder",
 			"recordstats",
 		},
 	}
