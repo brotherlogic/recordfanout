@@ -60,6 +60,12 @@ func (s *Server) Fanout(ctx context.Context, request *pb.FanoutRequest) (*pb.Fan
 	}
 	s.CtxLog(ctx, fmt.Sprintf("Running on %v", rec))
 
+	if rec.GetRecord().GetRelease().GetInstanceId() != request.GetInstanceId() {
+		s.RaiseIssue("Fanout mismatch", fmt.Sprintf("Fanout for %v was called with %v, but the record is %v", request.GetInstanceId(), rec.GetRecord().GetRelease().GetInstanceId(), rec.GetRecord().GetRelease().GetInstanceId()))
+
+		return &pb.FanoutResponse{}, nil
+	}
+
 	defer func() {
 		s.CtxLog(ctx, fmt.Sprintf("FanoutTook %v", time.Since(ot)))
 	}()
