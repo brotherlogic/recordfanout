@@ -25,10 +25,6 @@ require (
 	github.com/brotherlogic/lock v0.0.0-20260319021536-1ee751a89019 // indirect
 	github.com/brotherlogic/logging v0.0.0-20260319020728-4dbc020f1d5e // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
-	github.com/brotherlogic/queue v0.0.0-20260126145543-58b9a20f5d98 // indirect
-	github.com/brotherlogic/recordmover v0.0.0-20260122015541-3479b2c09aa3 // indirect
-	github.com/brotherlogic/recordscores v0.0.0-20251225062511-ec036c228844 // indirect
-	github.com/brotherlogic/recordsorganiser v0.0.0-20260123201746-434a56114f52 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
