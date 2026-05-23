@@ -31,7 +31,7 @@ func main() {
 		var id = fanoutFlags.Int("id", -1, "Id of the record to add")
 
 		if err := fanoutFlags.Parse(os.Args[2:]); err == nil {
-			res, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: int32(*id)})
+			res, err := client.Fanout(ctx, &pb.FanoutRequest{InstanceId: int64(*id)})
 			fmt.Printf("Fanout response: %v/%v\n", res, err)
 		}
 	case "clean":

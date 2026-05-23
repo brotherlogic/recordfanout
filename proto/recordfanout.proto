@@ -5,7 +5,7 @@ package recordfanout;
 option go_package = "github.com/brotherlogic/recordfanout/proto";
 
 message FanoutRequest{
-  int32 instance_id = 1;
+  int64 instance_id = 1;
 }
 
 message FanoutResponse {}
